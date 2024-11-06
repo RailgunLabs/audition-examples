@@ -1,6 +1,6 @@
 # Audition Examples
 
-This repository contains examples for the Audition testing framework.
+This repository contains examples for the [Audition testing framework](https://github.com/RailgunLabs/audition).
 No example exceeds the test limit for the unregistered version of Audition which means you can try them with Audition for free (no purchase necessary).
 
 [![Build Status](https://github.com/RailgunLabs/audition-examples/actions/workflows/build.yml/badge.svg)](https://github.com/RailgunLabs/audition-examples/actions/workflows/build.yml)
