@@ -1,0 +1,45 @@
+name: Build Status
+on: [push, pull_request]
+jobs:
+  windows:
+    name: "Windows - Visual Studio"
+    runs-on: windows-latest
+    env:
+      AUDITION_USER: ${{ secrets.AUDITION_USER }}
+      AUDITION_KEY: ${{ secrets.AUDITION_KEY }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Install Dependencies
+      run: |
+        Invoke-WebRequest -OutFile audition.msi -Uri https://github.com/RailgunLabs/audition/releases/download/v1.0.0/Audition-1.0.0.msi
+        msiexec /i audition.msi /quiet /norestart
+        echo "PATH=$env:PATH;$env:LOCALAPPDATA\Programs\Audition" | Out-File -FilePath $env:GITHUB_ENV -Append
+    - name: Run Tests
+      run: |
+        cmake -B build
+        cmake --build build --config Release
+        ctest --test-dir build --output-on-failure -C Release
+  linux:
+    name: "Linux - ${{ matrix.compiler.display }}"
+    runs-on: ubuntu-latest
+    env:
+      AUDITION_USER: ${{ secrets.AUDITION_USER }}
+      AUDITION_KEY: ${{ secrets.AUDITION_KEY }}
+    strategy:
+      matrix:
+        compiler:
+          - { CC: gcc, display: GCC }
+          - { CC: clang, display: Clang }
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Install Audition
+      run: |
+        curl -L -o audition.deb https://github.com/RailgunLabs/audition/releases/download/v1.0.0/Audition-1.0.0.deb
+        sudo dpkg -i ./audition.deb
+    - name: Run Tests
+      run: |
+        cmake -B build
+        cmake --build build
+        ctest --test-dir build --output-on-failure
