@@ -35,8 +35,8 @@ $ cmake --build build --config Release
 $ ctest --test-dir build --output-on-failure -C Release
 ```
 
-or navigate to each test directory and compile the source files yourself.
-I've you're running Linux and you installed Audition with a `.deb` or `.rpm`, then you can use [pkg-config](https://en.wikipedia.org/wiki/Pkg-config) to find the Audition library and header:
+or navigate to each test directory and compile the source files yourself (be sure to link against the Audition library).
+If you're running Linux and you installed Audition with a `.deb` or `.rpm`, then you can use [pkg-config](https://en.wikipedia.org/wiki/Pkg-config) to find the Audition library and header:
 
 ```
 $ pkg-config audition --libs --cflags
